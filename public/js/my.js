@@ -6,12 +6,12 @@ $routeProvider
 	.otherwise({redirectTo: '/'});
 })
 .controller('Ctrl1', function($scope,$http) {
-	$http.get("/all").then(function(response){
+	$http.post("/all").then(function(response){
 		$scope.all = response.data.all;
 	});
 })
 .controller('Ctrl2', function($scope,$routeParams,$http) {
-	$http.get("/row/"+$routeParams.name).then(function(response){
+	$http.post("/row/"+$routeParams.name).then(function(response){
 		$scope.id = response.data.id;
 		$scope.name = response.data.name;
 	});
