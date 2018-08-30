@@ -1,6 +1,5 @@
 #!/usr/bin/env perl;
 use Mojolicious::Lite;
-use Mojolicious::Static;
 use DBI;
 
 our $dbh = DBI->connect("dbi:SQLite:dbname=my.db3","","", { RaiseError => 1 });
@@ -16,13 +15,10 @@ get '/all' => sub {
 	my $sth = $dbh->prepare("select id, name from notes");
 	$sth->execute;
 	my $all = [];
-#	while (my $row = $sth->fetchrow_hashref){
-#		push @$all, $row;
-#	}
 	while(my ($id, $name) = $sth->fetchrow_array()) {
 		push @$all,{id=>$id,name=>$name};
 	}
-	$self->render('index',json=>{all=>$all});
+	$self->render(json=>{all=>$all});
 };
 
 get '/row/:name' => sub {
@@ -31,7 +27,7 @@ get '/row/:name' => sub {
 	my $sth = $dbh->prepare("select id, name from notes where name='" . $key ."'");
 	$sth->execute;
 	my ($id, $name) = $sth->fetchrow;
-	$self->render('index',json=>{id=>$id,name=>$name});
+	$self->render(json=>{id=>$id,name=>$name});
 };
 
 app->start;
