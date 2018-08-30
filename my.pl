@@ -10,7 +10,7 @@ get '/' => sub {
 	$self->render('index');
 };
 
-get '/all' => sub {
+post '/all' => sub {
 	my $self = shift;
 	my $sth = $dbh->prepare("select id, name from notes");
 	$sth->execute;
@@ -21,7 +21,7 @@ get '/all' => sub {
 	$self->render(json=>{all=>$all});
 };
 
-get '/row/:name' => sub {
+post '/row/:name' => sub {
 	my $self = shift;
 	my $key = $self->stash('name');
 	my $sth = $dbh->prepare("select id, name from notes where name='" . $key ."'");
@@ -37,6 +37,7 @@ __DATA__
 <!doctype html>
 <html data-ng-app="my">
 <head>
+<base href="/" />
 <title><%= title %></title>
 %= javascript '/mojo/jquery/jquery.js'
 %= javascript '/js/angular.min.js';
