@@ -2,11 +2,7 @@
 mojo-angularjs
 
 # requirements
-
-perl
-
-mojo framework
-
-angular.js
-
-angular-route.js
+- perl
+- mojo framework
+- angular.js
+- angular-route.js
