@@ -3,6 +3,6 @@ mojo-angularjs
 
 # requirements
 - perl
-- mojo framework
+- [mojolicious framework](https://mojolicious.org)
 - angular.js
 - angular-route.js
