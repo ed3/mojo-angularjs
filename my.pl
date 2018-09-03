@@ -1,15 +1,20 @@
 #!/usr/bin/env perl;
 use Mojolicious::Lite;
 use DBI;
-
-our $dbh = DBI->connect("dbi:SQLite:dbname=my.db3","","", { RaiseError => 1 });
-helper db => sub { $dbh };
+our $dbh = DBI->connect("dbi:SQLite:dbname=my.db3","","", {RaiseError => 1, AutoCommit => 1, sqlite_unicode => 1});
 
 get '/' => sub {
 	my $self = shift;
+	$dbh->do("CREATE TABLE IF NOT EXISTS notes(id INTEGER,name VARCHAR(25), PRIMARY KEY(id));");
+	my $sth = $dbh->prepare("SELECT count(*) FROM notes;");
+	$sth->execute;
+	my $count = $sth->fetchrow_array();
+	if($count < 1) {
+	$dbh->do("INSERT INTO notes VALUES(1,'Ed');");
+	$dbh->do("INSERT INTO notes VALUES(2,'Lee');");
+	}
 	$self->render('index');
 };
-
 post '/all' => sub {
 	my $self = shift;
 	my $sth = $dbh->prepare("select id, name from notes");
@@ -20,7 +25,6 @@ post '/all' => sub {
 	}
 	$self->render(json=>{all=>$all});
 };
-
 post '/row/:name' => sub {
 	my $self = shift;
 	my $key = $self->stash('name');
@@ -51,7 +55,6 @@ __DATA__
 
 @@not_found.html.ep
 Not Found!
-
 @@ index.html.ep
 % layout 'default';
 % title 'my';
